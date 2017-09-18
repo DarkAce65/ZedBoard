@@ -1,24 +1,24 @@
 #include <iostream>
 #include <string.h>
 
-int *array;
+int *vector;
 int COUNT;
 int SIZE;
 
 void initialize() {
 	COUNT = 0;
 	SIZE = 2;
-	array = new int[SIZE];
+	vector = new int[SIZE];
 }
 
 void finalize() {
-	delete[] array;
+	delete[] vector;
 }
 
 void printArray() {
 	std::cout << "[";
 	for(int i = 0; i < COUNT; i++) {
-		std::cout << array[i];
+		std::cout << vector[i];
 		if(i < COUNT - 1) {
 			std::cout << ", ";
 		}
@@ -30,9 +30,9 @@ void growArray() {
 	int s = SIZE;
 	SIZE *= 2;
 	int *newarray = new int[SIZE];
-	memcpy(newarray, array, COUNT * sizeof(int));
-	delete[] array;
-	array = newarray;
+	memcpy(newarray, vector, COUNT * sizeof(int));
+	delete[] vector;
+	vector = newarray;
 	std::cout << "Vector grown from " << s << " to " << SIZE << std::endl;
 }
 
@@ -40,9 +40,9 @@ void shrinkArray() {
 	int s = SIZE;
 	SIZE /= 2;
 	int *newarray = new int[SIZE];
-	memcpy(newarray, array, COUNT * sizeof(int));
-	delete[] array;
-	array = newarray;
+	memcpy(newarray, vector, COUNT * sizeof(int));
+	delete[] vector;
+	vector = newarray;
 	std::cout << "Vector shrunk from " << s << " to " << SIZE << std::endl;
 }
 
@@ -54,9 +54,9 @@ void insertElement(int index, int element) {
 	if(SIZE <= COUNT) {
 		growArray();
 	}
-	memcpy(array, array, index * sizeof(int));
-	memcpy(array + index + 1, array + index, (COUNT - index) * sizeof(int));
-	array[index] = element;
+	memcpy(vector, vector, index * sizeof(int));
+	memcpy(vector + index + 1, vector + index, (COUNT - index) * sizeof(int));
+	vector[index] = element;
 	COUNT++;
 }
 
@@ -82,7 +82,7 @@ int main() {
 	while(1) {
 		switch(option) {
 			case '0':
-				std::cout << "Main Menu:\n\n1. Print the array\n"
+				std::cout << "Main Menu:\n\n1. Print the vector\n"
 				"2. Append element at the end\n"
 				"3. Remove last element\n"
 				"4. Insert one element\n"
@@ -92,9 +92,9 @@ int main() {
 				std::cin >> option;
 				break;
 
-			case '1':  // Print the array
+			case '1':  // Print the vector
 				option = '0';
-				std::cout << "Array = ";
+				std::cout << "Vector = ";
 				printArray();
 				break;
 			case '2':  // Append element at the end
