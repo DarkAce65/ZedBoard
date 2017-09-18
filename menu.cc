@@ -5,6 +5,16 @@ int *array;
 int COUNT;
 int SIZE;
 
+void initialize() {
+	COUNT = 0;
+	SIZE = 2;
+	array = new int[SIZE];
+}
+
+void finalize() {
+	delete[] array;
+}
+
 void printArray() {
 	std::cout << "[";
 	for(int i = 0; i < COUNT; i++) {
@@ -21,6 +31,7 @@ void growArray() {
 	SIZE *= 2;
 	int *newarray = new int[SIZE];
 	memcpy(newarray, array, COUNT * sizeof(int));
+	delete[] array;
 	array = newarray;
 	std::cout << "Vector grown from " << s << " to " << SIZE << std::endl;
 }
@@ -30,6 +41,7 @@ void shrinkArray() {
 	SIZE /= 2;
 	int *newarray = new int[SIZE];
 	memcpy(newarray, array, COUNT * sizeof(int));
+	delete[] array;
 	array = newarray;
 	std::cout << "Vector shrunk from " << s << " to " << SIZE << std::endl;
 }
@@ -65,9 +77,7 @@ void removeElement() {
 }
 
 int main() {
-	SIZE = 5;
-	COUNT = 0;
-	array = new int[SIZE];
+	initialize();
 	char option = '0';
 	while(1) {
 		switch(option) {
@@ -110,6 +120,7 @@ int main() {
 				insertElement(index, insertEl);
 				break;
 			case '5':  // Exit
+				finalize();
 				return 0;
 			default:
 				std::cout << "Invalid option " << option << '\n';
