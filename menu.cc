@@ -1,23 +1,40 @@
 #include <iostream>
 #include <string.h>
 
-void printArray(int *array, int count) {
+int *array;
+int COUNT;
+int SIZE;
+
+void printArray() {
 	std::cout << "[";
-	for(int i = 0; i < count; i++) {
+	for(int i = 0; i < COUNT; i++) {
 		std::cout << array[i];
-		if(i < count - 1) {
+		if(i < COUNT - 1) {
 			std::cout << ", ";
 		}
 	}
 	std::cout << "]" << std::endl;
 }
 
-void insertElement(int *array, int count, int size, int index, int element) {
-	if(size > count) {
-		memcpy(array, array, (index) * sizeof(int));
-		memcpy(array + index + 1, array + index, (count - index) * sizeof(int));
+void insertElement(int index, int element) {
+	if(SIZE > COUNT) {
+		memcpy(array, array, index * sizeof(int));
+		memcpy(array + index + 1, array + index, (COUNT - index) * sizeof(int));
 		array[index] = element;
+		COUNT++;
 	}
+}
+
+void appendElement(int element) {
+	insertElement(COUNT, element);
+}
+
+void removeElement() {
+	if(COUNT <= 0) {
+		std::cout << "ERROR: Vector is empty" << std::endl;
+		return;
+	}
+	COUNT--;
 }
 
 int main() {
