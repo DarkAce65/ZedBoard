@@ -1,14 +1,14 @@
 #include <iostream>
 #include <string.h>
 
-int *vector;
+double *vector;
 int COUNT;
 int SIZE;
 
 void initialize() {
 	COUNT = 0;
 	SIZE = 2;
-	vector = new int[SIZE];
+	vector = new double[SIZE];
 }
 
 void finalize() {
@@ -29,8 +29,8 @@ void printArray() {
 void growArray() {
 	int s = SIZE;
 	SIZE *= 2;
-	int *newarray = new int[SIZE];
-	memcpy(newarray, vector, COUNT * sizeof(int));
+	double *newarray = new double[SIZE];
+	memcpy(newarray, vector, COUNT * sizeof(double));
 	delete[] vector;
 	vector = newarray;
 	std::cout << "Vector grown from " << s << " to " << SIZE << std::endl;
@@ -39,14 +39,14 @@ void growArray() {
 void shrinkArray() {
 	int s = SIZE;
 	SIZE /= 2;
-	int *newarray = new int[SIZE];
-	memcpy(newarray, vector, COUNT * sizeof(int));
+	double *newarray = new double[SIZE];
+	memcpy(newarray, vector, COUNT * sizeof(double));
 	delete[] vector;
 	vector = newarray;
 	std::cout << "Vector shrunk from " << s << " to " << SIZE << std::endl;
 }
 
-void insertElement(int index, int element) {
+void insertElement(int index, double element) {
 	if(index > COUNT) {
 		std::cout << "ERROR: Index out of bounds" << std::endl;
 		return;
@@ -54,13 +54,13 @@ void insertElement(int index, int element) {
 	if(SIZE <= COUNT) {
 		growArray();
 	}
-	memcpy(vector, vector, index * sizeof(int));
-	memcpy(vector + index + 1, vector + index, (COUNT - index) * sizeof(int));
+	memcpy(vector, vector, index * sizeof(double));
+	memcpy(vector + index + 1, vector + index, (COUNT - index) * sizeof(double));
 	vector[index] = element;
 	COUNT++;
 }
 
-void appendElement(int element) {
+void appendElement(double element) {
 	insertElement(COUNT, element);
 }
 
@@ -100,7 +100,7 @@ int main() {
 			case '2':  // Append element at the end
 				option = '0';
 				std::cout << "Enter new element: ";
-				int appendEl;
+				double appendEl;
 				std::cin >> appendEl;
 				appendElement(appendEl);
 				break;
@@ -114,7 +114,7 @@ int main() {
 				int index;
 				std::cin >> index;
 				std::cout << "Enter new element: ";
-				int insertEl;
+				double insertEl;
 				std::cin >> insertEl;
 
 				insertElement(index, insertEl);
