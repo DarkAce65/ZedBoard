@@ -13,16 +13,25 @@ void printArray() {
 			std::cout << ", ";
 		}
 	}
-	std::cout << "]" << std::endl;
+	std::cout << "] size = " << SIZE << std::endl;
+}
+
+void growArray() {
+	SIZE *= 2;
+	int *newarray = new int[SIZE];
+	memcpy(newarray, array, COUNT * sizeof(int));
+	array = newarray;
+	std::cout << "Vector grown from " << SIZE / 2 << " to " << SIZE << std::endl;
 }
 
 void insertElement(int index, int element) {
-	if(SIZE > COUNT) {
-		memcpy(array, array, index * sizeof(int));
-		memcpy(array + index + 1, array + index, (COUNT - index) * sizeof(int));
-		array[index] = element;
-		COUNT++;
+	if(SIZE <= COUNT) {
+		growArray();
 	}
+	memcpy(array, array, index * sizeof(int));
+	memcpy(array + index + 1, array + index, (COUNT - index) * sizeof(int));
+	array[index] = element;
+	COUNT++;
 }
 
 void appendElement(int element) {
