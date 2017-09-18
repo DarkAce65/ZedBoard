@@ -1,5 +1,16 @@
 #include <iostream>
 
+void printArray(int array[], int length) {
+	std::cout << "[";
+	for(int i = 0; i < length; i++) {
+		std::cout << array[i];
+		if(i < length - 1) {
+			std::cout << ", ";
+		}
+	}
+	std::cout << "]" << std::endl;
+}
+
 int main() {
 	char option = '0';
 	while(1) {
