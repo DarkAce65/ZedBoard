@@ -17,11 +17,21 @@ void printArray() {
 }
 
 void growArray() {
+	int s = SIZE;
 	SIZE *= 2;
 	int *newarray = new int[SIZE];
 	memcpy(newarray, array, COUNT * sizeof(int));
 	array = newarray;
-	std::cout << "Vector grown from " << SIZE / 2 << " to " << SIZE << std::endl;
+	std::cout << "Vector grown from " << s << " to " << SIZE << std::endl;
+}
+
+void shrinkArray() {
+	int s = SIZE;
+	SIZE /= 2;
+	int *newarray = new int[SIZE];
+	memcpy(newarray, array, COUNT * sizeof(int));
+	array = newarray;
+	std::cout << "Vector shrunk from " << s << " to " << SIZE << std::endl;
 }
 
 void insertElement(int index, int element) {
@@ -44,6 +54,9 @@ void removeElement() {
 		return;
 	}
 	COUNT--;
+	if(COUNT <= SIZE * 0.3) {
+		shrinkArray();
+	}
 }
 
 int main() {
