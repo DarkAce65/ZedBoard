@@ -35,6 +35,10 @@ void shrinkArray() {
 }
 
 void insertElement(int index, int element) {
+	if(index > COUNT) {
+		std::cout << "ERROR: Index out of bounds" << std::endl;
+		return;
+	}
 	if(SIZE <= COUNT) {
 		growArray();
 	}
@@ -54,12 +58,16 @@ void removeElement() {
 		return;
 	}
 	COUNT--;
+	std::cout << "Removed 1 element" << std::endl;
 	if(COUNT <= SIZE * 0.3) {
 		shrinkArray();
 	}
 }
 
 int main() {
+	SIZE = 5;
+	COUNT = 0;
+	array = new int[SIZE];
 	char option = '0';
 	while(1) {
 		switch(option) {
@@ -75,20 +83,31 @@ int main() {
 				break;
 
 			case '1':  // Print the array
-				std::cout << "You selected \"Print the array\"\n\n";
 				option = '0';
+				std::cout << "Array = ";
+				printArray();
 				break;
 			case '2':  // Append element at the end
-				std::cout << "You selected \"Append element at the end\"\n\n";
 				option = '0';
+				std::cout << "Enter new element: ";
+				int appendEl;
+				std::cin >> appendEl;
+				appendElement(appendEl);
 				break;
 			case '3':  // Remove last element
-				std::cout << "You selected \"Remove last element\"\n\n";
-				option = '0';
+				option = '0';				
+				removeElement();
 				break;
 			case '4':  // Insert one element
-				std::cout << "You selected \"Insert one element\"\n\n";
 				option = '0';
+				std::cout << "Enter index of new element: ";
+				int index;
+				std::cin >> index;
+				std::cout << "Enter new element: ";
+				int insertEl;
+				std::cin >> insertEl;
+
+				insertElement(index, insertEl);
 				break;
 			case '5':  // Exit
 				return 0;
