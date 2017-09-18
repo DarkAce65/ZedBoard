@@ -15,7 +15,7 @@ void finalize() {
 	delete[] vector;
 }
 
-void printArray() {
+void printVector() {
 	std::cout << "[";
 	for(int i = 0; i < COUNT; i++) {
 		std::cout << vector[i];
@@ -26,27 +26,27 @@ void printArray() {
 	std::cout << "] size = " << SIZE << std::endl;
 }
 
-void growArray() {
+void growArray() { // Double size of vector
 	int s = SIZE;
 	SIZE *= 2;
-	double *newarray = new double[SIZE];
-	memcpy(newarray, vector, COUNT * sizeof(double));
+	double *newVec = new double[SIZE];
+	memcpy(newVec, vector, COUNT * sizeof(double));
 	delete[] vector;
-	vector = newarray;
+	vector = newVec;
 	std::cout << "Vector grown from " << s << " to " << SIZE << std::endl;
 }
 
-void shrinkArray() {
+void shrinkArray() { // Halve size of vector
 	int s = SIZE;
 	SIZE /= 2;
-	double *newarray = new double[SIZE];
-	memcpy(newarray, vector, COUNT * sizeof(double));
+	double *newVec = new double[SIZE];
+	memcpy(newVec, vector, COUNT * sizeof(double));
 	delete[] vector;
-	vector = newarray;
+	vector = newVec;
 	std::cout << "Vector shrunk from " << s << " to " << SIZE << std::endl;
 }
 
-void insertElement(int index, double element) {
+void insertElement(int index, double element) { // Insert element at index
 	if(index > COUNT) {
 		std::cout << "ERROR: Index out of bounds" << std::endl;
 		return;
@@ -54,17 +54,17 @@ void insertElement(int index, double element) {
 	if(SIZE <= COUNT) {
 		growArray();
 	}
-	memcpy(vector, vector, index * sizeof(double));
+	// Shift elements inline
 	memcpy(vector + index + 1, vector + index, (COUNT - index) * sizeof(double));
 	vector[index] = element;
 	COUNT++;
 }
 
-void appendElement(double element) {
+void appendElement(double element) { // Insert element at the end
 	insertElement(COUNT, element);
 }
 
-void removeElement() {
+void removeElement() { // Remove last element
 	if(COUNT <= 0) {
 		std::cout << "ERROR: Vector is empty" << std::endl;
 		return;
@@ -95,7 +95,7 @@ int main() {
 			case '1':  // Print the vector
 				option = '0';
 				std::cout << "Vector = ";
-				printArray();
+				printVector();
 				break;
 			case '2':  // Append element at the end
 				option = '0';
