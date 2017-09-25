@@ -103,21 +103,53 @@ void setLedNumber(char *ptr, int value) {
 	registerWrite(ptr, gpio_led8_offset, (value / 128) % 2);
 }
 
+/** Set the state of the LED with the given index.
+ *
+ * @param ptr Base address for general-purpose I/O
+ * @parem led_index LED index between 0 and 7
+ * @param state Turn on (1) or off (0)
+ */
+void setLedState(char *ptr, int led_index, int state) {
+	int offset;
+	switch(led_index) {
+		case 0:
+			offset = gpio_led1_offset;
+			break;
+		case 1:
+			offset = gpio_led2_offset;
+			break;
+		case 2:
+			offset = gpio_led3_offset;
+			break;
+		case 3:
+			offset = gpio_led4_offset;
+			break;
+		case 4:
+			offset = gpio_led5_offset;
+			break;
+		case 5:
+			offset = gpio_led6_offset;
+			break;
+		case 6:
+			offset = gpio_led7_offset;
+			break;
+		case 7:
+			offset = gpio_led8_offset;
+			break;
+		default:
+			return;
+	}
+	* (int *) (ptr + offset) = state;
+}
+
 int main() {
 	// Initialize
 	int fd;
 	char *ptr = initialize(&fd);
-	// Check error
-	if (ptr == MAP_FAILED) {
-		perror("Mapping I/O memory failed - Did you run with 'sudo'?\n");
-		return -1;
-	}
-	int value;
-	std::cout << "Enter a value less than 256: ";
-	std::cin >> value;
-	// Show the value on the Zedboard LEDs
-	setLedNumber(ptr, value);
-	// Done
-	finalize(ptr, fd);
+	
+	setLedState(ptr, 3, 1);
+	setLedState(ptr, 2, 1);
+	setLedState(ptr, 7, 1);
+
 	return 0;
 }
