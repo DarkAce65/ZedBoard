@@ -168,24 +168,30 @@ int main() {
 
 	int state = z->getSwitchState();
 
+	int c = 0;
 	bool pressed = false;
+	bool right = false;
+	int speed = 0;
 	while(true) {
+		if(c % 10 == 0) {
+			state += right ? speed : -speed;
+		}
 		int direction = z->readDirection();
 		if(!pressed && direction == 1) {
 			pressed = true;
-			state += 1;
+			speed += 1;
 		}
 		else if(!pressed && direction == 2) {
 			pressed = true;
-			state -= 1;
+			speed -= 1;
 		}
 		else if(!pressed && direction == 3) {
 			pressed = true;
-			state <<= 1;
+			right = false;
 		}
 		else if(!pressed && direction == 4) {
 			pressed = true;
-			state >>= 1;
+			right = true;
 		}
 		else if(!pressed && direction == 5) {
 			pressed = true;
@@ -199,6 +205,7 @@ int main() {
 			z->setLedState(i, (state >> i) & 1);
 		}
 		usleep(100 * 1000);
+		c++;
 	}
 
 	delete z;
