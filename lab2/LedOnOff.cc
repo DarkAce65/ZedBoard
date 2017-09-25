@@ -230,6 +230,7 @@ int main() {
 		for(int i = 0; i < 8; i++) {
 			setLedState(ptr, i, (state >> i) & 1);
 		}
+		usleep(100 * 1000);
 	}
 
 	return 0;
