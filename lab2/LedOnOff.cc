@@ -36,7 +36,7 @@ const int gpio_pbtnc_offset = 0x17C; // Offset for center push button
  * @parem offset Offset where device is mapped.
  * @param value Value to be written.
  */
-void RegisterWrite(char *ptr, int offset, int value) {
+void registerWrite(char *ptr, int offset, int value) {
 	* (int *) (ptr + offset) = value;
 } 
 
@@ -47,7 +47,7 @@ void RegisterWrite(char *ptr, int offset, int value) {
  * @param offset Offset where device is mapped.
  * @return Value read.
  */
-int RegisterRead(char *ptr, int offset) {
+int registerRead(char *ptr, int offset) {
 	return * (int *) (ptr + offset);
 }
 
@@ -64,7 +64,7 @@ int RegisterRead(char *ptr, int offset) {
  * Address to virtual memory which is mapped to physical,
  * or MAP_FAILED on error.
  */
-char *Initialize(int *fd) {
+char *initialize(int *fd) {
 	*fd = open( "/dev/mem", O_RDWR);
 	return (char *) mmap(
 		NULL,
@@ -81,7 +81,7 @@ char *Initialize(int *fd) {
  * @param ptr Virtual address where I/O was mapped.
  * @param fd File descriptor previously returned by 'open'.
  */
-void Finalize(char *ptr, int fd) {
+void finalize(char *ptr, int fd) {
 	munmap(ptr, gpio_size);
 	close(fd);
 } 
@@ -92,7 +92,7 @@ void Finalize(char *ptr, int fd) {
  * @param ptr Base address of I/O
  * @param value Value to show on LEDs
  */
-void SetLedNumber(char *ptr, int value) {
+void setLedNumber(char *ptr, int value) {
 	RegisterWrite(ptr, gpio_led1_offset, value % 2);
 	RegisterWrite(ptr, gpio_led2_offset, (value / 2) % 2);
 	RegisterWrite(ptr, gpio_led3_offset, (value / 4) % 2);
