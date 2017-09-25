@@ -142,19 +142,38 @@ void setLedState(char *ptr, int led_index, int state) {
 	* (int *) (ptr + offset) = state;
 }
 
+int readSwitch(char *ptr, int switch_index) {
+	switch(switch_index) {
+		case 0:
+			return registerRead(ptr, gpio_sw1_offset);
+		case 1:
+			return registerRead(ptr, gpio_sw2_offset);
+		case 2:
+			return registerRead(ptr, gpio_sw3_offset);
+		case 3:
+			return registerRead(ptr, gpio_sw4_offset);
+		case 4:
+			return registerRead(ptr, gpio_sw5_offset);
+		case 5:
+			return registerRead(ptr, gpio_sw6_offset);
+		case 6:
+			return registerRead(ptr, gpio_sw7_offset);
+		case 7:
+			return registerRead(ptr, gpio_sw8_offset);
+	}
+	return -1;
+}
+
 int main() {
 	// Initialize
 	int fd;
 	char *ptr = initialize(&fd);
-	
-	int led;
-	int state;
-	std::cout << "Enter an LED index from 0 to 7: ";
-	std::cin >> led;
-	std::cout << "Enter a state On (1) or Off (0): ";
-	std::cin >> state;
 
-	setLedState(ptr, led, state);
+	while(true) {
+		for(int i = 0; i < 8; i++) {
+			setLedState(ptr, i, readSwitch(ptr, i));
+		}
+	}
 
 	return 0;
 }
