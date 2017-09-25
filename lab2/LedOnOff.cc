@@ -38,7 +38,7 @@ const int gpio_pbtnc_offset = 0x17C; // Offset for center push button
  */
 void registerWrite(char *ptr, int offset, int value) {
 	* (int *) (ptr + offset) = value;
-} 
+}
 
 /**
  * Read a 4-byte value from the specified general-purpose I/O location.
@@ -84,7 +84,7 @@ char *initialize(int *fd) {
 void finalize(char *ptr, int fd) {
 	munmap(ptr, gpio_size);
 	close(fd);
-} 
+}
 
 /**
  * Show lower 8 bits of integer value on LEDs
@@ -147,9 +147,14 @@ int main() {
 	int fd;
 	char *ptr = initialize(&fd);
 	
-	setLedState(ptr, 3, 1);
-	setLedState(ptr, 2, 1);
-	setLedState(ptr, 7, 1);
+	int led;
+	int state;
+	std::cout << "Enter an LED index from 0 to 7: ";
+	std::cin >> led;
+	std::cout << "Enter a state On (1) or Off (0): ";
+	std::cin >> state;
+
+	setLedState(ptr, led, state);
 
 	return 0;
 }
