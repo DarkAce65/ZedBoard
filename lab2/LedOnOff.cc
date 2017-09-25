@@ -164,24 +164,27 @@ int readSwitch(char *ptr, int switch_index) {
 	return -1;
 }
 
-int readDirection(char *ptr, char direction) {
-	switch(direction) {
-		case 'u':
-			return registerRead(ptr, gpio_pbtnu_offset);
-		case 'd':
-			return registerRead(ptr, gpio_pbtnd_offset);
-		case 'l':
-			return registerRead(ptr, gpio_pbtnl_offset);
-		case 'r':
-			return registerRead(ptr, gpio_pbtnr_offset);
-		case 'c':
-			return registerRead(ptr, gpio_pbtnc_offset);
+int readDirection(char *ptr) {
+	if(registerRead(ptr, gpio_pbtnu_offset)) {
+		return 1;
 	}
-	return -1;
+	if(registerRead(ptr, gpio_pbtnd_offset)) {
+		return 2;
+	}
+	if(registerRead(ptr, gpio_pbtnl_offset)) {
+		return 3;
+	}
+	if(registerRead(ptr, gpio_pbtnr_offset)) {
+		return 4;
+	}
+	if(registerRead(ptr, gpio_pbtnc_offset)) {
+		return 5;
+	}
+	return 0;
 }
 
 int getSwitchState(char *ptr) {
-	int state;
+	int state = 0;
 	for(int i = 0; i < 8; i++) {
 		if(readSwitch(ptr, i)) {
 			state += 0b1 << i;
@@ -197,46 +200,31 @@ int main() {
 
 	int state = getSwitchState(ptr);
 
-	bool uPressed = false;
-	bool dPressed = false;
-	bool lPressed = false;
-	bool rPressed = false;
-	bool cPressed = false;
+	bool pressed = false;
 	while(true) {
-		if(!uPressed && readDirection(ptr, 'u') != 0) {
-			uPressed = true;
+		int direction = readDirection(ptr);
+		if(!pressed && direction == 1) {
+			pressed = true;
 			state += 1;
 		}
-		else {
-			uPressed = false;
-		}
-		if(!dPressed && readDirection(ptr, 'd') != 0) {
-			dPressed = true;
+		else if(!pressed && direction == 2) {
+			pressed = true;
 			state -= 1;
 		}
-		else {
-			dPressed = false;
-		}
-		if(!lPressed && readDirection(ptr, 'l') != 0) {
-			lPressed = true;
+		else if(!pressed && direction == 3) {
+			pressed = true;
 			state <<= 1;
 		}
-		else {
-			lPressed = false;
-		}
-		if(!rPressed && readDirection(ptr, 'r') != 0) {
-			rPressed = true;
+		else if(!pressed && direction == 4) {
+			pressed = true;
 			state >>= 1;
 		}
-		else {
-			rPressed = false;
+		else if(!pressed && direction == 5) {
+			pressed = true;
+			state = getSwitchState(ptr);
 		}
-		if(!cPressed && readDirection(ptr, 'c') != 0) {
-			cPressed = true;
-			state += 0;
-		}
-		else {
-			cPressed = false;
+		else if(direction == 0) {
+			pressed = false;
 		}
 
 		for(int i = 0; i < 8; i++) {
