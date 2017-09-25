@@ -5,8 +5,8 @@ all: menu
 bin:
 	mkdir -p bin
 
-menu: bin menu.cc
-	g++ $(CXXFLAGS) menu.cc -o bin/menu
+menu: bin lab1/menu.cc
+	g++ $(CXXFLAGS) lab1/menu.cc -o bin/menu
 
 clean:
 	rm -f bin/*
