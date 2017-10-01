@@ -173,7 +173,7 @@ int main() {
 	bool right = false;
 	int speed = 0;
 	while(true) {
-		if(c % 10 / speed == 0) {
+		if(speed != 0 && c % 10 == 0) {
 			state += right ? 1 : -1;
 		}
 		int direction = z->readDirection();
@@ -207,7 +207,7 @@ int main() {
 			z->setLedState(i, (state >> i) & 1);
 		}
 		usleep(100 * 1000);
-		c++;
+		c += speed;
 	}
 
 	delete z;
