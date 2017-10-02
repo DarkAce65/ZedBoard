@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Wiimote.h"
 
 Wiimote::Wiimote() {
@@ -13,7 +12,7 @@ Wiimote::~Wiimote() {
 	close(this->fd);
 }
 
-Wiimote::listen() {
+void Wiimote::listen() {
 	while(true) {
 		char buffer[32];
 		read(fd, buffer, 32);
@@ -24,6 +23,6 @@ Wiimote::listen() {
 	}
 }
 
-Wiimote::buttonEvent(int code, int value) {
+void Wiimote::buttonEvent(int code, int value) {
 	std::cout << "Code = " << code << ", value = " << value << std::endl;
 }
