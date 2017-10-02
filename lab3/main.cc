@@ -1,33 +1,79 @@
 #include "Wiimote.h"
 #include "ZedBoard.h"
 
-class WiimoteToLed : public Wiimote {
+class WiimotePosition : public Wiimote {
 private:
 	ZedBoard* z;
+	time_t lastPrint;
+	time_t lastPoll;
+	float position[3];
+	float velocity[3];
+	float acceleration[3];
 
 public:
-	WiimoteToLed(ZedBoard* z) {
+	WiimotePosition(ZedBoard* z) {
 		this->z = z;
+		this->lastPrint = time(0);
+		this->lastPoll = time(0);
 	};
 
+	void integrateAcceleration() {
+		time_t t = time(0);
+		time_t delta = t - this->lastPoll;
+		for(int i = 0; i < 3; i++) {
+			this->velocity[i] = this->acceleration[i] * delta;
+			this->position[i] = this->velocity[i] * delta;
+		}
+		this->lastPoll = t;
+	}
+
 	void accelerationEvent(int code, int acceleration) {
-		if(code != 3) {
+		if(code != 3 && code != 4 && code != 5) {
 			return;
 		}
-		int truncated = std::min(std::max(-100, acceleration), 100);
-		int scaled = abs(truncated) * 8 / 100;
-		for(int i = 0; i < scaled; i++) {
-			z->setLedState(i, 1);
+		switch(code) {
+			case 3: // X
+				this->acceleration[0] = acceleration;
+				break;
+			case 4: // Y
+				this->acceleration[1] = acceleration;
+				break;
+			case 5: // Z
+				this->acceleration[2] = acceleration;
+				break;
 		}
-		for(int i = scaled; i < 8; i++) {
-			z->setLedState(i, 0);
+		integrateAcceleration();
+		print();
+	}
+
+	void printArray(float array[], int length) {
+		std::cout << "[";
+		for(int i = 0; i < length; i++) {
+			std::cout << array[i];
+			if(i < length - 1) {
+				std::cout << ", ";
+			}
+		}
+		std::cout << "]" << std::endl;
+	}
+
+	void print() {
+		time_t t = time(0);
+		if(t - this->lastPrint >= 60) {
+			std::cout << "Position: ";
+			printArray(this->position, 3);
+			std::cout << "Velocity: ";
+			printArray(this->velocity, 3);
+			std::cout << "Acceleration: ";
+			printArray(this->acceleration, 3);
+			this->lastPrint = t;
 		}
 	}
 };
 
 int main() {
 	ZedBoard z;
-	WiimoteToLed w(&z);
+	WiimotePosition w(&z);
 	w.listen();
 
 	return 0;
