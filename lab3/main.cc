@@ -1,3 +1,5 @@
+#include <sys/time.h>
+
 #include "Wiimote.h"
 #include "ZedBoard.h"
 
@@ -13,16 +15,22 @@ private:
 public:
 	WiimotePosition(ZedBoard* z) {
 		this->z = z;
-		this->lastPrint = time(0);
-		this->lastPoll = time(0);
+		this->lastPrint = getTime();
+		this->lastPoll = getTime();
 	};
 
+	long getTime() {
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return 1000000 * tv.tv_sec + tv.tv_usec;
+	}
+
 	void integrateAcceleration() {
-		time_t t = time(0);
+		time_t t = getTime();
 		time_t delta = t - this->lastPoll;
 		for(int i = 0; i < 3; i++) {
-			this->velocity[i] = this->acceleration[i] * delta;
-			this->position[i] = this->velocity[i] * delta;
+			this->velocity[i] = this->acceleration[i] * delta / 1000000;
+			this->position[i] = this->velocity[i] * delta / 1000000;
 		}
 		this->lastPoll = t;
 	}
@@ -58,8 +66,8 @@ public:
 	}
 
 	void print() {
-		time_t t = time(0);
-		if(t - this->lastPrint >= 60) {
+		time_t t = getTime();
+		if(t - this->lastPrint >= 1000000) {
 			std::cout << "Position: ";
 			printArray(this->position, 3);
 			std::cout << "Velocity: ";
