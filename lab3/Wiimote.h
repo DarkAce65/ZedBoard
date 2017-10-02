@@ -15,7 +15,7 @@ public:
 	~Wiimote();
 	
 	void listen();
-	void buttonEvent(int code, int value);
+	virtual void accelerationEvent(int code, int acceleration);
 };
 
 #endif
