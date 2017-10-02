@@ -6,7 +6,7 @@ bin:
 	mkdir -p bin
 
 main: bin main.cc
-	g++ $(CXXFLAGS) Wiimote.cc main.cc -o bin/main
+	g++ $(CXXFLAGS) ZedBoard.cc Wiimote.cc main.cc -o bin/main
 
 clean:
 	rm -rf bin/
