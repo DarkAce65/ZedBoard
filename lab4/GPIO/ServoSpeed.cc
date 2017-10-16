@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include "GPIO.h"
 
 int pulse(int theta) {
@@ -53,7 +54,7 @@ int main() {
 	}
 
 	GPIO gpio(pin);
-	gpio.GenerateVariablePWM(20000, pulse(initial), pulse(final), (final - initial) / (speed * 0.02));
+	gpio.GenerateVariablePWM(20000, pulse(initial), pulse(final), abs(final - initial) / (speed * 0.02));
 
 	return 0;
 }
