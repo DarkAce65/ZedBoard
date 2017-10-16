@@ -1,0 +1,5 @@
+The first series of commands writes 13, 10, 11, 12, and 0, corresponding to the port numbers of the arm servos, to the unexport virtual file. This then "unexports" the values, resetting the arm's configuration. The second part of these commands, 2>/dev/null redirects the stderr to /dev/null, hiding any errors from these commands from the users, throwing them away. 
+
+The next set of commands writes the same values to the export virtual file, which should initialize the ports for the servos.
+
+The final set of commands configures the ports to "out" making them output to the servos, which finalizes the initialization and allows us to write commands out from those ports.
