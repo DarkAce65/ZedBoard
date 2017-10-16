@@ -1,11 +1,11 @@
-ServoSpeed: ServoSpeed.o GPIO.o
-	g++ ServoSpeed.o GPIO.o -o ServoSpeed
+MultiSpeed: MultiSpeed.o GPIO.o
+	g++ MultiSpeed.o GPIO.o -o MultiSpeed
 
-ServoSpeed.o: ServoSpeed.cc GPIO.h
-	g++ -c ServoSpeed.cc
+MultiSpeed.o: MultiSpeed.cc GPIO.h
+	g++ -c MultiSpeed.cc
 
 GPIO.o: GPIO.cc GPIO.h
 	g++ -c GPIO.cc
 
 clean:
-	rm *.o ServoSpeed
+	rm *.o MultiSpeed
