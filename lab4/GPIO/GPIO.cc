@@ -43,3 +43,16 @@ void GPIO::GeneratePWM(int period, int pulse, int num_periods) {
 		usleep(period - pulse);
 	}
 }
+
+void GPIO::GenerateVariablePWM(int period, int first_pulse, int last_pulse, int num_periods) {
+	int d = last_pulse - first_pulse;
+	for(int i = 0; i < num_periods; i++) {
+		float progress = i / (float) num_periods;
+		int pulse = first_pulse + d * progress;
+
+		write(fd, "1", 1);
+		usleep(pulse);
+		write(fd, "0", 1);
+		usleep(period - pulse);
+	}
+}
